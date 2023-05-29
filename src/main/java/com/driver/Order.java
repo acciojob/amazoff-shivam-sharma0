@@ -21,22 +21,5 @@ public class Order {
         this.id=id;
     }
 
-    public String getId() {
-        return id;
-    }
-
-
-    public int getDeliveryTime() {return deliveryTime;}
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setDeliveryTime(int deliveryTime) {
-        this.deliveryTime = deliveryTime;
-    }
-      public void setDeliveryTime(String deliveryTime) {
-        this.deliveryTime = TimeUtil.convertDeliverTime(deliveryTime);
-    }
 
 }

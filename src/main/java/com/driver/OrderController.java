@@ -46,15 +46,15 @@ public class OrderController {
 
     @GetMapping("/get-order-by-id/{orderId}")
     public ResponseEntity<Order> getOrderById(@PathVariable String orderId){
-        Optional<Order> order= order=orderService.getOrderById(orderId);
-        return new ResponseEntity<>(order.get(), HttpStatus.CREATED);
+        Order order= order=orderService.getOrderById(orderId);
+        return new ResponseEntity<>(order, HttpStatus.CREATED);
     }
 
     @GetMapping("/get-partner-by-id/{partnerId}")
     public ResponseEntity<DeliveryPartner> getPartnerById(@PathVariable String partnerId){
-        Optional<DeliveryPartner> deliveryPartner = orderService.getPartnerById(partnerId);
+        DeliveryPartner deliveryPartner = orderService.getPartnerById(partnerId);
         //deliveryPartner should contain the value given by partnerId
-        return new ResponseEntity<>(deliveryPartner.get(), HttpStatus.CREATED);
+        return new ResponseEntity<>(deliveryPartner, HttpStatus.CREATED);
     }
 
     @GetMapping("/get-order-count-by-partner-id/{partnerId}")

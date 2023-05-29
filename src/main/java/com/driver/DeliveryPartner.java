@@ -7,8 +7,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class DeliveryPartner {
 
     private String id;
@@ -19,15 +17,4 @@ public class DeliveryPartner {
         this.numberOfOrders = 0;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public Integer getNumberOfOrders(){
-        return numberOfOrders;
-    }
-
-    public void setNumberOfOrders(Integer numberOfOrders) {
-        this.numberOfOrders = numberOfOrders;
-    }
 }
