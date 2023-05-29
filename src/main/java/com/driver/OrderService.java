@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
 @Getter
 @Setter
 @Service
@@ -27,30 +29,36 @@ private OrderRepository orderRepository;
         orderRepository.addOrderPartnerPair(orderId,partnerId);
     }
 
-    public Order getOrderById(String orderId) {
+    public Optional<Order> getOrderById(String orderId) {
         return orderRepository.getOrderById(orderId);
     }
 
-    public DeliveryPartner getPartnerById(String partnerId) {
+    public Optional<DeliveryPartner> getPartnerById(String partnerId) {
         return orderRepository.getPartnerById(partnerId);
     }
 
     public Integer getOrderCountByPartnerId(String partnerId) {
-        Map<DeliveryPartner, List<Order>> orderParterMap=orderRepository.getPartnerOrderPairMap();
-        DeliveryPartner deliveryPartner=orderRepository.getPartnerById(partnerId);
-        Integer totalOrders=orderParterMap.getOrDefault(deliveryPartner,new ArrayList<>()).size();
-        return totalOrders;
+        Map<String,List<String>> pairMap=orderRepository.getPartnerOrderPairMap();
+        Optional<DeliveryPartner> deliveryPartner=orderRepository.getPartnerById(partnerId);
+        if(deliveryPartner.isEmpty())return 0;
+
+        if(pairMap.containsKey(partnerId)){
+        List<String> list=pairMap.get(partnerId);
+        return list.size();
+        }
+        return 0;
     }
 
     public List<String> getOrdersByPartnerId(String partnerId) {
-        Map<DeliveryPartner, List<Order>> orderParterMap=orderRepository.getPartnerOrderPairMap();
-        DeliveryPartner deliveryPartner=orderRepository.getPartnerById(partnerId);
-        List<Order>parterOrderList=orderParterMap.getOrDefault(deliveryPartner,new ArrayList<>());
-        List<String> orderIds=new ArrayList<>();
-        for(Order order:parterOrderList){
-            orderIds.add(order.getId());
+        Map<String,List<String>> pairMap=orderRepository.getPartnerOrderPairMap();
+        Optional<DeliveryPartner> deliveryPartner=orderRepository.getPartnerById(partnerId);
+        if(deliveryPartner.isEmpty()) return new ArrayList<>();
+
+        if(pairMap.containsKey(partnerId)){
+            List<String> list=pairMap.get(partnerId);
+            return list;
         }
-        return orderIds;
+        return new ArrayList<>();
     }
 
     public List<String> getAllOrders() {
@@ -61,13 +69,7 @@ private OrderRepository orderRepository;
 
     public Integer getCountOfUnassignedOrders() {
         Map<String,Order> orderMap=orderRepository.getOrderMap();
-        Map<DeliveryPartner, List<Order>> orderPartnerMap=orderRepository.getPartnerOrderPairMap();
-        Integer assignedOrderSize=0;
-        for (DeliveryPartner deliveryPartner:orderPartnerMap.keySet()){
-            List<Order> listOrOrder=orderPartnerMap.get(deliveryPartner);
-            assignedOrderSize+=listOrOrder.size();
-        }
-        Integer totalOrderSize=orderMap.size();
-        return totalOrderSize-assignedOrderSize;
+        Map<String,String> orderPartner=orderRepository.getOrderPartner();
+        return orderMap.size()-orderPartner.size();
     }
 }

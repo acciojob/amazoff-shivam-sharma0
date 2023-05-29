@@ -1,6 +1,7 @@
 package com.driver;
 
 import java.util.List;
+import java.util.Optional;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -45,15 +46,15 @@ public class OrderController {
 
     @GetMapping("/get-order-by-id/{orderId}")
     public ResponseEntity<Order> getOrderById(@PathVariable String orderId){
-        Order order= order=orderService.getOrderById(orderId);
-        return new ResponseEntity<>(order, HttpStatus.CREATED);
+        Optional<Order> order= order=orderService.getOrderById(orderId);
+        return new ResponseEntity<>(order.get(), HttpStatus.CREATED);
     }
 
     @GetMapping("/get-partner-by-id/{partnerId}")
     public ResponseEntity<DeliveryPartner> getPartnerById(@PathVariable String partnerId){
-        DeliveryPartner deliveryPartner = orderService.getPartnerById(partnerId);
+        Optional<DeliveryPartner> deliveryPartner = orderService.getPartnerById(partnerId);
         //deliveryPartner should contain the value given by partnerId
-        return new ResponseEntity<>(deliveryPartner, HttpStatus.CREATED);
+        return new ResponseEntity<>(deliveryPartner.get(), HttpStatus.CREATED);
     }
 
     @GetMapping("/get-order-count-by-partner-id/{partnerId}")

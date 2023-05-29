@@ -4,10 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 @Getter
@@ -16,7 +13,8 @@ public class OrderRepository {
 
     Map<String,Order> orderMap=new HashMap<>();
     Map<String,DeliveryPartner> partnerMap=new HashMap<>();
-    Map<DeliveryPartner,List<Order>>partnerOrderPairMap=new HashMap<>();
+    Map<String,String> orderPartner=new HashMap<>();
+    Map<String,List<String>>partnerOrderPairMap=new HashMap<>();
     public void addOrder(Order order) {
         orderMap.put(order.getId(),order);
     }
@@ -27,22 +25,29 @@ public class OrderRepository {
     }
 
     public void addOrderPartnerPair(String orderId, String partnerId) {
-        Order order=getOrderById(orderId);
-        DeliveryPartner deliveryPartner=getPartnerById(partnerId);
-        deliveryPartner.setNumberOfOrders(deliveryPartner.getNumberOfOrders()+1);
-        List<Order>orderList=partnerOrderPairMap.getOrDefault(deliveryPartner,new ArrayList<>());
-        orderList.add(order);
-        partnerOrderPairMap.put(deliveryPartner,orderList);
+        Optional<Order> order=getOrderById(orderId);
+        Optional<DeliveryPartner> deliveryPartner=getPartnerById(partnerId);
+        if(order.isEmpty() || deliveryPartner.isEmpty()){
+            throw new RuntimeException("OrderId or Partner is Not right");
+        }
+        orderPartner.put(orderId,partnerId);
+        List<String>orderList=partnerOrderPairMap.getOrDefault(partnerId,new ArrayList<>());
+        orderList.add(orderId);
+        partnerOrderPairMap.put(partnerId,orderList);
     }
 
-    public Order getOrderById(String orderId) {
-        Order order=orderMap.getOrDefault(orderId,new Order());
-        return order;
+    public Optional<Order> getOrderById(String orderId) {
+       if(orderMap.containsKey(orderId)){
+           return Optional.of(orderMap.get(orderId));
+       }
+        return Optional.empty();
     }
 
-    public DeliveryPartner getPartnerById(String partnerId) {
-        DeliveryPartner deliveryPartner=partnerMap.getOrDefault(partnerId,new DeliveryPartner());
-        return deliveryPartner;
+    public Optional<DeliveryPartner> getPartnerById(String partnerId) {
+        if(partnerMap.containsKey(partnerId)){
+            return Optional.of(partnerMap.get(partnerId));
+        }
+        return Optional.empty();
     }
 
 }
