@@ -12,7 +12,7 @@ public class OrderRepository {
     Map<String, Order> orderMap=new HashMap<>();
     Map<String, DeliveryPartner> partnerMap=new HashMap<>();
     Map<String,String> assignedOrder=new HashMap<>();
-    Map<DeliveryPartner,List<Order>> partnerOrderMap=new HashMap<>()
+    Map<DeliveryPartner,List<Order>> partnerOrderMap=new HashMap<>();
     public void addOrder(Order order) {
         orderMap.put(order.getId(), order);
     }
