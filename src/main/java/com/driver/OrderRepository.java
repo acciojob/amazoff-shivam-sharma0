@@ -36,12 +36,12 @@ public class OrderRepository {
     }
 
     public Order getOrderById(String orderId) {
-        Order order=orderMap.getOrDefault(orderId,null);
+        Order order=orderMap.getOrDefault(orderId,new Order());
         return order;
     }
 
     public DeliveryPartner getPartnerById(String partnerId) {
-        DeliveryPartner deliveryPartner=partnerMap.getOrDefault(partnerId,null);
+        DeliveryPartner deliveryPartner=partnerMap.getOrDefault(partnerId,new DeliveryPartner());
         return deliveryPartner;
     }
 

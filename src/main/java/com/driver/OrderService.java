@@ -38,7 +38,6 @@ private OrderRepository orderRepository;
     public Integer getOrderCountByPartnerId(String partnerId) {
         Map<DeliveryPartner, List<Order>> orderParterMap=orderRepository.getPartnerOrderPairMap();
         DeliveryPartner deliveryPartner=orderRepository.getPartnerById(partnerId);
-        if (deliveryPartner==null)return 0;
         Integer totalOrders=orderParterMap.getOrDefault(deliveryPartner,new ArrayList<>()).size();
         return totalOrders;
     }
