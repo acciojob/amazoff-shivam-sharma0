@@ -1,14 +1,19 @@
 package com.driver;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderService {
 
-    OrderRepository orderRepository = new OrderRepository();
+    @Autowired
+    OrderRepository orderRepository ;
 
     public void addOrder(Order order){
         orderRepository.addOrder(order);
